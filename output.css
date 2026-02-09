@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f9fa;
   color: #2c3e50;
   line-height: 1.6;
@@ -172,25 +172,23 @@ body {
     flex-direction: column;
     gap: 10px;
   }
-  
   .product-card__features .feature {
     flex-direction: row;
     justify-content: flex-start;
     padding: 0;
   }
-  
   .product-card__features .feature i {
     margin-right: 10px;
     margin-bottom: 0;
   }
-  
   .product-card__footer {
     flex-direction: column;
     gap: 15px;
     align-items: flex-start;
   }
-  
   .product-card__button {
     width: 100%;
   }
 }
+
+/*# sourceMappingURL=output.css.map */
