@@ -3,85 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карточка товара</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Карточка товара · SoundMax Pro</title>
+    <!-- GitHub репозиторий: https://github.com/rlnyzz/1prac_Sysoev_efbo0824 -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f2f5 0%, #e6e9f0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        /* карточка — основной контейнер */
+        .product-card {
+            max-width: 420px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.6);
+            backdrop-filter: blur(2px);
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 32px 55px -10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* изображение / верхняя часть с плашками */
+        .card-media {
+            position: relative;
+            background: radial-gradient(circle at 30% 20%, #d4e0f0, #b0c0d4);
+            height: 240px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        /* стилизованный "товар" — можно заменить на реальный PNG, 
+           но сейчас графический акцент через фон и svg-иконку */
+        .product-visual {
+            width: 80%;
+            max-width: 220px;
+            filter: drop-shadow(0 12px 14px rgba(0,20,30,0.4));
+            transition: transform 0.2s;
+        }
+
+        .product-visual svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* хит продаж (левая верхняя плашка) */
+        .badge-hit {
+            position: absolute;
+            top: 20px;
+            left: 22px;
+            background: #e1554f;
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            padding: 0.45rem 1.2rem 0.45rem 1rem;
+            border-radius: 40px;
+            box-shadow: 0 6px 12px rgba(225, 85, 79, 0.4);
+            z-index: 5;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(2px);
+        }
+
+        /* скидка 20% — правая верхняя плашка */
+        .badge-sale {
+            position: absolute;
+            top: 20px;
+            right: 22px;
+            background: #2b3d4f;
+            color: #fde24f;
+            font-weight: 800;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            z-index: 5;
+            border: 1px solid #fce35b;
+        }
+
+        /* тело карточки (контент) */
+        .card-content {
+            padding: 1.8rem 1.8rem 2rem;
+            background: #ffffff;
+        }
+
+        /* категория / подзаголовок */
+        .category-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #5e6f88;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        /* название товара */
+        .product-title {
+            font-size: 1.85rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.2rem;
+            color: #121826;
+            letter-spacing: -0.02em;
+        }
+
+        .product-title span {
+            font-weight: 400;
+            font-size: 1.3rem;
+            color: #475569;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        /* характеристики (список фичей) */
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+            margin-bottom: 1.7rem;
+        }
+
+        .feature-item {
+            background: #f0f4fc;
+            padding: 0.35rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1d2b3f;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #d9e2ef;
+        }
+
+        .feature-item::before {
+            content: "✓";
+            font-weight: 700;
+            color: #2e6e9e;
+            font-size: 1rem;
+        }
+
+        /* блок цены */
+        .price-section {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.8rem 1rem;
+            margin-bottom: 2rem;
+            background: #f2f5f9;
+            padding: 0.9rem 1.4rem;
+            border-radius: 60px;
+        }
+
+        .current-price {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #0e1e32;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .old-price {
+            font-size: 1.3rem;
+            color: #6f7d95;
+            text-decoration: line-through;
+            font-weight: 500;
+        }
+
+        .discount-note {
+            background: #d9efd9;
+            color: #1f6b3b;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            margin-left: auto;
+            border: 1px solid #a0d1a0;
+        }
+
+        /* кнопка "В корзину" */
+        .add-to-cart {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background: #111f33;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 1.1rem 2rem;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s, box-shadow 0.2s;
+            gap: 12px;
+            box-shadow: 0 18px 22px -12px rgba(0, 20, 40, 0.3);
+            border: 1px solid #304a6e;
+        }
+
+        .add-to-cart:hover {
+            background: #1f324b;
+            box-shadow: 0 24px 28px -12px #0b1b30;
+        }
+
+        .add-to-cart:active {
+            transform: scale(0.98);
+            background: #0b1727;
+        }
+
+        /* иконка корзины (svg) */
+        .cart-icon {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        /* дополнительно: ссылка на гитхаб в подвале карточки (по желанию) */
+        .github-footnote {
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 0.7rem;
+            color: #546e85;
+        }
+        .github-footnote a {
+            color: #1f3b5c;
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px dotted #7c8fa8;
+        }
+        .github-footnote a:hover {
+            color: #000;
+            border-bottom: 1px solid;
+        }
+
+        /* микро-адаптив */
+        @media (max-width: 450px) {
+            .product-title { font-size: 1.6rem; }
+            .current-price { font-size: 1.9rem; }
+            .badge-hit, .badge-sale { font-size: 0.75rem; padding: 0.3rem 1rem; }
+            .badge-sale { font-size: 1rem; }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Каталог товаров</h1>
-        
-        <div class="product-card">
-            <div class="product-card__badge">Хит продаж</div>
-            <div class="product-card__image">
-                <img src="наушники.webp" alt="Наушники Wireless Pro">
-            </div>
-            <div class="product-card__content">
-                <h2 class="product-card__title">Беспроводные наушники SoundMax Pro</h2>
-                <p class="product-card__description">Высококачественные беспроводные наушники с активным шумоподавлением, временем работы до 30 часов и водонепроницаемостью IPX7.</p>
-                
-                <div class="product-card__features">
-                    <div class="feature">
-                        <i class="fas fa-headphones"></i>
-                        <span>Шумоподавление</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-bolt"></i>
-                        <span>Быстрая зарядка</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-clock"></i>
-                        <span>30 ч работы</span>
-                    </div>
-                </div>
-                
-                <div class="product-card__footer">
-                    <div class="product-card__price">
-                        <span class="current-price">8 990 ₽</span>
-                        <span class="old-price">10 490 ₽</span>
-                    </div>
-                    <button class="product-card__button">
-                        <i class="fas fa-shopping-cart"></i> В корзину
-                    </button>
-                </div>
+    <div class="product-card">
+        <div class="card-media">
+            <!-- плашка "Хит продаж" слева -->
+            <div class="badge-hit">🔥 Хит продаж</div>
+            <!-- плашка скидки справа (берём из макета 20%) -->
+            <div class="badge-sale">-20%</div>
+            <div class="product-visual">
+                <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M40 70C40 45.6 60.2 26 85 26C109.8 26 130 45.6 130 70V92C130 106.6 118.2 118 103.6 118H96.4C81.8 118 70 106.6 70 92V86C70 78.8 75.8 73 83 73H96C103.2 73 109 78.8 109 86V98C109 105.2 103.2 111 96 111H89.4C78.2 111 69 101.8 69 90.6V70" fill="#1F2A3F" stroke="#2F405E" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="70" cy="70" r="9" fill="#2E405B" stroke="#B0C6DC" stroke-width="2.5" />
+                    <circle cx="130" cy="70" r="9" fill="#2E405B" stroke="#B0C6DC" stroke-width="2.5" />
+                    <path d="M150 70C150 45.6 172 26 200 26" stroke="#3F556F" stroke-width="5" stroke-linecap="round" stroke-dasharray="6 6" />
+                    <path d="M50 70C50 45.6 28 26 0 26" stroke="#3F556F" stroke-width="5" stroke-linecap="round" stroke-dasharray="6 6" />
+                    <rect x="90" y="98" width="20" height="10" rx="5" fill="#2E405B" />
+                </svg>
             </div>
         </div>
-        
-        <div class="product-card product-card--discount">
-            <div class="product-card__badge">Скидка 20%</div>
-            <div class="product-card__image">
-                <img src="фотоаппарат.webp" alt="Фотоаппарат">
+
+        <div class="card-content">
+            <div class="category-tag">⚡ Каталог товаров · Беспроводные</div>
+
+            <h2 class="product-title">
+                Беспроводные наушники <span>SoundMax Pro</span>
+            </h2>
+
+            <div class="feature-list">
+                <span class="feature-item">Шумоподавление</span>
+                <span class="feature-item">Быстрая зарядка</span>
+                <span class="feature-item">30 ч работы</span>
+                <span class="feature-item">IPX7</span>   
+
+            <div class="price-section">
+                <span class="current-price">8 990 ₽</span>
+                <span class="old-price">10 490 ₽</span>
+                <span class="discount-note">−20%</span>
             </div>
-            <div class="product-card__content">
-                <h2 class="product-card__title">Зеркальный фотоаппарат PhotoMaster X200</h2>
-                <p class="product-card__description">Профессиональная зеркальная камера с матрицей 24.2 МП, сменными объективами и возможностью съемки видео 4K.</p>
-                
-                <div class="product-card__features">
-                    <div class="feature">
-                        <i class="fas fa-camera"></i>
-                        <span>24.2 МП</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-video"></i>
-                        <span>4K видео</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-wifi"></i>
-                        <span>Wi-Fi</span>
-                    </div>
-                </div>
-                
-                <div class="product-card__footer">
-                    <div class="product-card__price">
-                        <span class="current-price">54 990 ₽</span>
-                        <span class="old-price">68 740 ₽</span>
-                    </div>
-                    <button class="product-card__button">
-                        <i class="fas fa-shopping-cart"></i> В корзину
-                    </button>
-                </div>
+
+            <button class="add-to-cart">
+                <svg class="cart-icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+                </svg>
+                В корзину
+            </button>
+
+
+            <div class="github-footnote">
+                <a href="https://github.com/rlnyzz/1prac_Sysoev_efbo0824" target="_blank" rel="noopener noreferrer">github.com/rlnyzz/1prac_Sysoev_efbo0824</a>
             </div>
         </div>
     </div>
+
 </body>
 </html>
